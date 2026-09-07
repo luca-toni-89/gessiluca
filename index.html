@@ -75,6 +75,9 @@
     }
 
     .opening.is-open { opacity: 0; visibility: hidden; }
+    .opening.is-opening .opening__mark { animation: openingPulse .95s cubic-bezier(.2,.8,.2,1) both; }
+    .opening.is-opening .opening__inner { animation: openingLift .95s ease both; }
+    .opening.is-opening .open-button { pointer-events: none; }
     .opening__inner { max-width: 380px; }
     .opening__mark {
       width: 82px;
@@ -369,87 +372,63 @@
       animation: floatAway 1.8s ease-out forwards;
     }
 
+    .forever-red { color: #b92f50 !important; font-weight: 800; }
+
     .lock-scene {
       position: relative;
-      width: min(100%, 430px);
-      height: 480px;
-      margin: 58px auto -34px;
-      overflow: hidden;
-      isolation: isolate;
+      width: min(100%, 460px);
+      margin: 54px auto -42px;
     }
-    .love-grid {
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      opacity: .38;
-      background:
-        repeating-linear-gradient(45deg, transparent 0 31px, rgba(230, 217, 207, .55) 32px 35px, transparent 36px 64px),
-        repeating-linear-gradient(-45deg, transparent 0 31px, rgba(230, 217, 207, .55) 32px 35px, transparent 36px 64px);
-      mask-image: linear-gradient(to bottom, transparent 0, #000 10%, #000 88%, transparent 100%);
+    .love-lock-svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      overflow: visible;
     }
-    .love-grid::before,
-    .love-grid::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      height: 5px;
-      border-radius: 999px;
-      background: linear-gradient(90deg, transparent, rgba(230,217,207,.62) 10%, rgba(230,217,207,.62) 90%, transparent);
-      box-shadow: 0 2px 9px rgba(0,0,0,.35);
-    }
-    .love-grid::before { top: 23%; }
-    .love-grid::after { bottom: 18%; }
-    .lock {
-      position: absolute;
-      z-index: 2;
-      left: 50%;
-      top: 48%;
-      width: 190px;
-      height: 158px;
+    .fence-mesh { opacity: .32; }
+    .fence-rail { opacity: .52; }
+    .lock-piece {
       opacity: 0;
-      transform: translate(-50%, -80%) rotate(-8deg) scale(.92);
-      filter: drop-shadow(0 24px 34px rgba(0,0,0,.52));
+      transform-box: fill-box;
+      transform-origin: center;
+      transform: translateY(-105px) rotate(-7deg) scale(.94);
+      filter: drop-shadow(0 23px 24px rgba(0,0,0,.5));
     }
-    .lock__shackle {
-      position: absolute;
-      z-index: -1;
-      left: 50%;
-      top: -79px;
-      width: 100px;
-      height: 100px;
-      border: 13px solid #dfbd89;
-      border-bottom: 0;
-      border-radius: 58px 58px 0 0;
-      transform: translateX(-50%) translate(-14px,-7px) rotate(-26deg);
-      transform-origin: 17px 91px;
-      box-shadow: inset 4px 0 rgba(255,255,255,.18), 0 0 26px rgba(230,201,153,.13);
+    .lock-shackle {
+      transform-box: view-box;
+      transform-origin: 153px 246px;
+      transform: translate(-8px,-6px) rotate(-24deg);
     }
-    .lock__body {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 18px 13px 15px;
-      border: 1px solid rgba(255,255,255,.27);
-      border-radius: 40px 40px 50px 50px;
-      background: linear-gradient(145deg, #ca738c, #733049 78%);
-      box-shadow: inset 0 2px rgba(255,255,255,.22), inset 0 -16px 30px rgba(54,12,33,.3);
-    }
-    .lock__heart { color: #f9e3df; font-size: 1.9rem; line-height: 1; text-shadow: 0 3px 12px rgba(65,13,36,.35); }
-    .lock__names { margin: 8px 0 0 !important; color: #fff8f4 !important; font: italic 1.3rem/1.05 var(--serif) !important; white-space: nowrap; }
-    .lock__date { margin: 8px 0 0 !important; color: #f2d6ab !important; font-size: .66rem !important; font-weight: 800; letter-spacing: .11em; }
-    .lock-scene.is-locked .lock { animation: lockArrive 1.05s cubic-bezier(.2,.86,.25,1) forwards; }
-    .lock-scene.is-locked .lock__shackle { animation: lockClose 1s cubic-bezier(.22,.9,.24,1) .95s forwards; }
-    .lock-scene.is-locked .lock__body { animation: lockPulse .55s ease 1.9s both; }
+    .lock-glint { opacity: .46; }
+    .lock-scene.is-locked .lock-piece { animation: svgLockArrive 1.15s cubic-bezier(.16,.84,.25,1) forwards; }
+    .lock-scene.is-locked .lock-shackle { animation: svgLockClose .95s cubic-bezier(.2,.9,.25,1) 1.02s forwards; }
+    .lock-scene.is-locked .lock-body { animation: svgLockPulse .55s ease 1.9s both; transform-box: fill-box; transform-origin: center; }
 
-    @keyframes lockArrive {
-      0% { opacity: 0; transform: translate(-50%,-105%) rotate(-8deg) scale(.92); }
-      62% { opacity: 1; transform: translate(-50%,-45%) rotate(2deg) scale(1); }
-      80% { opacity: 1; transform: translate(-50%,-53%) rotate(-1deg) scale(1); }
-      100% { opacity: 1; transform: translate(-50%,-50%) rotate(0) scale(1); }
+    @keyframes openingPulse {
+      0% { transform: scale(1); box-shadow: 0 0 0 10px rgba(230,201,153,.035), 0 20px 60px rgba(0,0,0,.4); }
+      45% { transform: scale(1.2); color: #fff3df; box-shadow: 0 0 0 25px rgba(230,201,153,.07), 0 0 70px rgba(232,154,168,.55); }
+      100% { transform: scale(.88); opacity: 0; }
+    }
+    @keyframes openingLift {
+      0%, 35% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-18px); opacity: 0; }
+    }
+    @keyframes svgLockArrive {
+      0% { opacity: 0; transform: translateY(-105px) rotate(-7deg) scale(.94); }
+      62% { opacity: 1; transform: translateY(8px) rotate(2deg) scale(1); }
+      79% { opacity: 1; transform: translateY(-5px) rotate(-1deg) scale(1); }
+      100% { opacity: 1; transform: translateY(0) rotate(0) scale(1); }
+    }
+    @keyframes svgLockClose {
+      0% { transform: translate(-8px,-6px) rotate(-24deg); }
+      72% { transform: translate(0,0) rotate(0); }
+      86% { transform: translate(0,-3px) rotate(0); }
+      100% { transform: translate(0,0) rotate(0); }
+    }
+    @keyframes svgLockPulse {
+      0% { transform: scale(1); filter: brightness(1); }
+      48% { transform: scale(1.035); filter: brightness(1.16); }
+      100% { transform: scale(1); filter: brightness(1); }
     }
 
     @keyframes pulse { 50% { opacity: .3; transform: translateY(6px); } }
@@ -526,6 +505,9 @@
           <figcaption>Bevor mir gwüsst hend, wie gross das alles wird.</figcaption>
         </figure>
         <p class="signature-line">Du bisch nöd eifach in mis Läbe cho. Du hesch dich sofort wie mis Dihei ahgfühlt.</p>
+        <figure class="photo-frame reveal">
+          <img src="assets/8.jpg" alt="Luca und Gessica – ein Moment wie Dihei" loading="lazy">
+        </figure>
       </div>
     </section>
 
@@ -535,6 +517,9 @@
         <h3>Mis fehlende Puzzleteil.</h3>
         <p>Alles zwüsched eus isch vo Afang ah so natürlich, zwanglos und vertraut gsi. Es het sich nöd wie öppis Neus ahgfühlt, sondern wie öppis, wo scho immer zemeghört het. Es het sich für eus beidi vo Afang ah so klar und richtig ahgfühlt, dass es gar nüt gross z’überlege geh het. Mir hend sehr schnell gwüsst: Mir ghöred zäme. Mir sind füreinander gmacht. Mir mached’s offiziell!</p>
         <div class="truth reveal"><q>Ich han mich unglaublich schnell und fest in dich verliebt.</q></div>
+        <figure class="photo-frame reveal">
+          <img src="assets/9.jpg" alt="Luca und Gessica – frisch verliebt" loading="lazy">
+        </figure>
       </div>
     </section>
 
@@ -568,6 +553,9 @@
         <figure class="photo-frame reveal">
           <img src="assets/3.jpg" alt="Luca und Gessica – gemeinsam unterwegs" loading="lazy">
           <figcaption>Nöd nur nebeneinander. Mitenand.</figcaption>
+        </figure>
+        <figure class="photo-frame reveal">
+          <img src="assets/10.jpg" alt="Luca und Gessica – gemeinsam glücklich" loading="lazy">
         </figure>
       </div>
     </section>
@@ -630,7 +618,7 @@
             <p>In dem Jahr hesch du mir so viel geh: Nöchi, Wärmi, Lache, Halt. Du hesch mir zeigt, wie schön es isch, wenn mer sich bi öpperem dehei fühlt.</p>
             <p>Ich weiss, dass ich in letschter Ziit viel gschaffet ha. Und ich weiss au, dass sich euses halbe Zämezieh zurziit so ahfühlt, als würded mir eus no weniger gseh. Die Situation isch momentan nöd eifach, und es tuet mir unendlich leid. Ich ha nöd gwüsst, dass mer en Mensch so schnell und so fest vermisse chan – bis ich dich troffe han. Ich möcht, dass du weisch: Du bisch nöd de Teil vo mim Läbe, wo no irgendwo Platz het. Du bisch de Mensch, mit dem ich de Rest vo mim Läbe teile will. Ich glaube ganz fest dra, dass mir scho bald viel meh Ziit fürenand ha werdet, vorher gibe ich nöd uf. Aber lahn eus jetzt als Allererschts eusi Ferie zeme gnüsse!</p>
             <p>Danke, dass du mich liebsch. Danke, dass du mit mir wachssch. Danke, dass du au in schwierige Moment dini Hand wieder i mini leisch und mit mir nach füre luegsch.</p>
-            <p>Ich weiss nöd, was all die nächste Jahr bringe werdet, das weiss niemert. Aber ich weiss ganz bestimmt, wer a minere Siite sii söll. <strong>UND ZWAR FÜR IMMER!</strong></p>
+            <p>Ich weiss nöd, was all die nächste Jahr bringe werdet, das weiss niemert. Aber ich weiss ganz bestimmt, wer a minere Siite sii söll. <strong class="forever-red">UND ZWAR FÜR IMMER!</strong></p>
             <p class="sign">Ich lieb dich vo ganzem Herze ❤️<br>Din Luca</p>
           </article>
         </div>
@@ -646,15 +634,63 @@
         <p><strong>Uf euses zweite Jahr. Und uf all die Jahr, wo no uf eus warted.</strong></p>
 
         <div class="lock-scene" id="lockScene" aria-label="Unser Liebesschloss am Gitter">
-          <div class="love-grid" aria-hidden="true"></div>
-          <div class="lock" aria-label="Liebesschloss von Gessica und Luca, 09.09.2025">
-            <div class="lock__shackle" aria-hidden="true"></div>
-            <div class="lock__body">
-              <span class="lock__heart" aria-hidden="true">♥</span>
-              <p class="lock__names">Gessica &amp; Luca</p>
-              <p class="lock__date">09.09.2025</p>
-            </div>
-          </div>
+          <svg class="love-lock-svg" viewBox="0 0 420 500" role="img" aria-labelledby="lockTitle lockDesc">
+            <title id="lockTitle">Gessica und Luca – für immer</title>
+            <desc id="lockDesc">Ein roségoldenes Liebesschloss mit Herz und Datum am Metallgitter.</desc>
+            <defs>
+              <linearGradient id="steel" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#f0e6da"/>
+                <stop offset=".32" stop-color="#9b8c88"/>
+                <stop offset=".7" stop-color="#d7c7ba"/>
+                <stop offset="1" stop-color="#75686a"/>
+              </linearGradient>
+              <linearGradient id="roseMetal" x1=".1" y1="0" x2=".9" y2="1">
+                <stop offset="0" stop-color="#e9a5b2"/>
+                <stop offset=".3" stop-color="#bd617d"/>
+                <stop offset=".72" stop-color="#843851"/>
+                <stop offset="1" stop-color="#582139"/>
+              </linearGradient>
+              <linearGradient id="goldMetal" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#fff0bd"/>
+                <stop offset=".34" stop-color="#d7a864"/>
+                <stop offset=".67" stop-color="#f0cd89"/>
+                <stop offset="1" stop-color="#a66b31"/>
+              </linearGradient>
+              <radialGradient id="bodyGlow" cx=".32" cy=".18" r=".9">
+                <stop offset="0" stop-color="#fff" stop-opacity=".34"/>
+                <stop offset=".45" stop-color="#fff" stop-opacity=".04"/>
+                <stop offset="1" stop-color="#240a18" stop-opacity=".28"/>
+              </radialGradient>
+              <pattern id="chainMesh" width="74" height="74" patternUnits="userSpaceOnUse">
+                <path d="M-37 37 0 0l37 37L0 74zm74 0L74 0l37 37-37 37z" fill="none" stroke="url(#steel)" stroke-width="4.2" stroke-linecap="round"/>
+              </pattern>
+              <filter id="softShadow" x="-40%" y="-40%" width="180%" height="200%">
+                <feDropShadow dx="0" dy="16" stdDeviation="12" flood-color="#000" flood-opacity=".5"/>
+              </filter>
+            </defs>
+
+            <g class="fence-mesh">
+              <rect x="12" y="34" width="396" height="430" rx="16" fill="url(#chainMesh)"/>
+            </g>
+            <g class="fence-rail" fill="url(#steel)">
+              <rect x="9" y="145" width="402" height="8" rx="4"/>
+              <rect x="9" y="408" width="402" height="8" rx="4"/>
+            </g>
+
+            <g class="lock-piece" filter="url(#softShadow)">
+              <g class="lock-shackle" fill="none" stroke="url(#goldMetal)" stroke-width="17" stroke-linecap="round">
+                <path d="M153 266v-69c0-42 25-68 57-68s57 26 57 68v69"/>
+                <path class="lock-glint" d="M161 259v-60c0-35 20-58 49-58" stroke="#fff4ca" stroke-width="3.2"/>
+              </g>
+              <g class="lock-body">
+                <rect x="102" y="246" width="216" height="166" rx="44" fill="url(#roseMetal)" stroke="#efb3c1" stroke-opacity=".54" stroke-width="2"/>
+                <rect x="105" y="249" width="210" height="160" rx="41" fill="url(#bodyGlow)"/>
+                <path d="M210 298c-11-17-38-10-38 11 0 22 38 42 38 42s38-20 38-42c0-21-27-28-38-11z" fill="#fff0e9"/>
+                <text x="210" y="374" text-anchor="middle" fill="#fff9f5" font-family="Georgia, serif" font-size="23" font-style="italic">Gessica &amp; Luca</text>
+                <text x="210" y="396" text-anchor="middle" fill="#f5d89f" font-family="Arial, sans-serif" font-size="11.5" font-weight="700" letter-spacing="2.4">09.09.2025</text>
+              </g>
+            </g>
+          </svg>
         </div>
       </div>
     </section>
@@ -669,10 +705,26 @@
     const finaleHeart = document.querySelector('.finale__heart');
     const lockScene = document.getElementById('lockScene');
 
-    openButton.addEventListener('click', () => {
-      opening.classList.add('is-open');
-      document.body.classList.add('started');
-      window.setTimeout(() => opening.setAttribute('aria-hidden', 'true'), 950);
+    openButton.addEventListener('click', (event) => {
+      openButton.textContent = 'Für dich ♥';
+      opening.classList.add('is-opening');
+
+      for (let i = 0; i < 14; i += 1) {
+        const heart = document.createElement('span');
+        heart.className = 'floating-heart';
+        heart.textContent = '♥';
+        heart.style.left = `${event.clientX + (Math.random() - .5) * 110}px`;
+        heart.style.top = `${event.clientY + (Math.random() - .5) * 36}px`;
+        heart.style.fontSize = `${11 + Math.random() * 17}px`;
+        document.body.appendChild(heart);
+        window.setTimeout(() => heart.remove(), 1900);
+      }
+
+      window.setTimeout(() => {
+        opening.classList.add('is-open');
+        document.body.classList.add('started');
+      }, 720);
+      window.setTimeout(() => opening.setAttribute('aria-hidden', 'true'), 1650);
     });
 
     window.addEventListener('scroll', () => {
