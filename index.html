@@ -369,9 +369,104 @@
       animation: floatAway 1.8s ease-out forwards;
     }
 
+    .lock-ending {
+      position: fixed;
+      inset: 0;
+      z-index: 400;
+      display: grid;
+      place-items: center;
+      padding: 28px;
+      opacity: 0;
+      visibility: hidden;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(169, 79, 104, .28), transparent 23rem),
+        rgba(8, 5, 10, .98);
+      transition: opacity .9s ease, visibility .9s ease;
+    }
+    .lock-ending.is-visible { opacity: 1; visibility: visible; }
+    .lock-ending__inner { width: min(100%, 420px); text-align: center; }
+    .lock {
+      position: relative;
+      width: 138px;
+      height: 122px;
+      margin: 62px auto 38px;
+      filter: drop-shadow(0 24px 36px rgba(0, 0, 0, .48));
+    }
+    .lock__shackle {
+      position: absolute;
+      left: 25px;
+      top: -64px;
+      width: 88px;
+      height: 92px;
+      border: 11px solid #e1bd88;
+      border-bottom: 0;
+      border-radius: 50px 50px 0 0;
+      transform: translate(-12px, -8px) rotate(-31deg);
+      transform-origin: 14px 82px;
+      box-shadow: inset 3px 0 rgba(255, 255, 255, .2), 0 0 30px rgba(230, 201, 153, .16);
+    }
+    .lock__body {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, .2);
+      border-radius: 28px;
+      background: linear-gradient(145deg, #c56e85, #77314c);
+      box-shadow: inset 0 1px rgba(255, 255, 255, .28), inset 0 -12px 28px rgba(64, 18, 39, .28);
+    }
+    .lock__keyhole {
+      position: relative;
+      width: 17px;
+      height: 30px;
+      border-radius: 10px 10px 7px 7px;
+      background: #24101c;
+      box-shadow: 0 0 0 5px rgba(255, 255, 255, .045);
+    }
+    .lock__keyhole::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: -7px;
+      width: 21px;
+      height: 21px;
+      border-radius: 50%;
+      background: #24101c;
+      transform: translateX(-50%);
+    }
+    .lock-ending.is-visible .lock__shackle { animation: lockClose 1.15s cubic-bezier(.22, .9, .24, 1) .65s forwards; }
+    .lock-ending.is-visible .lock__body { animation: lockPulse .55s ease 1.7s both; }
+    .lock-ending__copy { opacity: 0; transform: translateY(16px); }
+    .lock-ending.is-visible .lock-ending__copy { animation: endingCopyIn .9s ease 1.85s forwards; }
+    .lock-ending__names { margin: 0; color: var(--ink); font: 400 clamp(2.3rem, 12vw, 4rem)/1 var(--serif); letter-spacing: -.04em; }
+    .lock-ending__date { margin: 16px 0 0; color: var(--gold); font-size: .78rem; font-weight: 750; letter-spacing: .2em; }
+    .lock-ending__dismiss {
+      margin-top: 48px;
+      padding: 10px 14px;
+      border: 0;
+      color: rgba(249, 241, 236, .58);
+      background: transparent;
+      font-size: .72rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
     @keyframes pulse { 50% { opacity: .3; transform: translateY(6px); } }
     @keyframes heartbeat { 50% { transform: scale(1.16); } }
     @keyframes floatAway { to { opacity: 0; transform: translateY(-110px) rotate(20deg) scale(.5); } }
+    @keyframes lockClose {
+      0% { transform: translate(-12px, -8px) rotate(-31deg); }
+      72% { transform: translate(0, 0) rotate(0); }
+      86% { transform: translate(0, -4px) rotate(0); }
+      100% { transform: translate(0, 0) rotate(0); }
+    }
+    @keyframes lockPulse {
+      0% { transform: scale(1); filter: brightness(1); }
+      45% { transform: scale(1.07); filter: brightness(1.18); }
+      100% { transform: scale(1); filter: brightness(1); }
+    }
+    @keyframes endingCopyIn { to { opacity: 1; transform: none; } }
 
     @media (min-width: 760px) {
       .section { padding: 120px 36px; }
@@ -558,12 +653,45 @@
     </section>
   </main>
 
+  <div class="lock-ending" id="lockEnding" aria-hidden="true" role="dialog" aria-label="Gessica und Luca, seit 9. September 2025">
+    <div class="lock-ending__inner">
+      <div class="lock" aria-hidden="true">
+        <div class="lock__shackle"></div>
+        <div class="lock__body"><span class="lock__keyhole"></span></div>
+      </div>
+      <div class="lock-ending__copy">
+        <p class="lock-ending__names">Gessica &amp; Luca</p>
+        <p class="lock-ending__date">09.09.2025</p>
+        <button class="lock-ending__dismiss" id="lockDismiss" type="button">Zurück zur Gschicht</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const opening = document.getElementById('opening');
     const openButton = document.getElementById('openButton');
     const progress = document.getElementById('progress');
     const letter = document.getElementById('letter');
     const letterButton = document.getElementById('letterButton');
+    const finale = document.querySelector('.finale');
+    const finaleHeart = document.querySelector('.finale__heart');
+    const lockEnding = document.getElementById('lockEnding');
+    const lockDismiss = document.getElementById('lockDismiss');
+    let lockStarted = false;
+
+    function showLockEnding(force = false) {
+      if (lockStarted && !force) return;
+      lockStarted = true;
+      lockEnding.classList.remove('is-visible');
+      void lockEnding.offsetWidth;
+      lockEnding.classList.add('is-visible');
+      lockEnding.setAttribute('aria-hidden', 'false');
+    }
+
+    function hideLockEnding() {
+      lockEnding.classList.remove('is-visible');
+      lockEnding.setAttribute('aria-hidden', 'true');
+    }
 
     openButton.addEventListener('click', () => {
       opening.classList.add('is-open');
@@ -590,7 +718,21 @@
     }, { threshold: .12 });
     document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
 
-    document.querySelector('.finale__heart').addEventListener('click', (event) => {
+    const finaleObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && !lockStarted) {
+          window.setTimeout(() => showLockEnding(), 1800);
+        }
+      });
+    }, { threshold: .68 });
+    finaleObserver.observe(finale);
+
+    lockDismiss.addEventListener('click', hideLockEnding);
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') hideLockEnding();
+    });
+
+    finaleHeart.addEventListener('click', (event) => {
       for (let i = 0; i < 9; i += 1) {
         const heart = document.createElement('span');
         heart.className = 'floating-heart';
@@ -601,6 +743,7 @@
         document.body.appendChild(heart);
         window.setTimeout(() => heart.remove(), 1900);
       }
+      window.setTimeout(() => showLockEnding(true), 350);
     });
   </script>
 </body>
