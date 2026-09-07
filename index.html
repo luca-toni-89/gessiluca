@@ -192,7 +192,9 @@
     .scroll-cue { margin-top: 30px; color: var(--muted); font-size: .73rem; letter-spacing: .14em; text-transform: uppercase; }
     .scroll-cue i { display: block; width: 1px; height: 34px; margin: 12px auto 0; background: linear-gradient(var(--rose), transparent); animation: pulse 1.8s ease-in-out infinite; }
 
-    .section { position: relative; padding: 88px 22px; }
+    .section { position: relative; padding: 64px 22px; }
+    .section + .section { padding-top: 42px; }
+    .section .photo-frame:last-child { margin-bottom: 0; }
     .section__inner { width: min(100%, 720px); margin: 0 auto; }
     .chapter-no { display: block; margin-bottom: 15px; color: var(--rose); font: italic 1rem var(--serif); }
     .section h3 {
@@ -212,7 +214,7 @@
       background: #1c121c;
       box-shadow: 0 35px 90px rgba(0, 0, 0, .46);
     }
-    .photo-frame img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+    .photo-frame img { width: 100%; height: auto; aspect-ratio: auto; object-fit: contain; }
     .photo-frame figcaption {
       padding: 15px 17px 18px;
       color: var(--muted);
@@ -299,7 +301,7 @@
       background: #1d131c;
       box-shadow: 0 24px 60px rgba(0, 0, 0, .3);
     }
-    .gallery img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+    .gallery img { width: 100%; height: auto; aspect-ratio: auto; object-fit: contain; }
     .gallery figcaption { padding: 16px 17px 18px; color: var(--muted); font: italic 1rem var(--serif); }
     .swipe-hint { margin-top: 8px !important; color: var(--gold) !important; font-size: .72rem !important; letter-spacing: .12em; text-transform: uppercase; }
 
@@ -448,7 +450,8 @@
     @keyframes endingCopyIn { to { opacity: 1; transform: none; } }
 
     @media (min-width: 760px) {
-      .section { padding: 120px 36px; }
+      .section { padding: 94px 36px; }
+      .section + .section { padding-top: 68px; }
       .photo-frame { width: 78%; }
       .reasons { grid-template-columns: 1fr 1fr; }
       .truth { padding: 42px; }
@@ -507,6 +510,7 @@
         <p class="signature-line">Du bisch nöd eifach in mis Läbe cho. Du hesch dich sofort wie mis Dihei ahgfühlt.</p>
         <figure class="photo-frame reveal">
           <img src="assets/8.png" alt="Luca und Gessica – ein Moment wie Dihei" loading="lazy">
+          <figcaption>Das isch mir bewusst, min Schatz</figcaption>
         </figure>
       </div>
     </section>
