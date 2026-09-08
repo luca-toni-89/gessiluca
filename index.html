@@ -109,6 +109,43 @@
       color: var(--muted);
       font: italic 1.08rem/1.65 var(--serif);
     }
+    .capybara-cta {
+      position: relative;
+      width: min(67vw, 250px);
+      margin: 8px auto -10px;
+      isolation: isolate;
+    }
+    .capybara-cta__image {
+      display: block;
+      width: 100%;
+      height: auto;
+      filter: drop-shadow(0 22px 32px rgba(0, 0, 0, .38));
+      pointer-events: none;
+      user-select: none;
+    }
+    .capybara-cta .open-button {
+      position: absolute;
+      z-index: 2;
+      left: 50%;
+      top: 64%;
+      min-width: 132px;
+      padding: 12px 17px;
+      transform: translate(-50%, -50%);
+      border-color: rgba(255, 231, 195, .68);
+      color: #fff8ee;
+      background: linear-gradient(135deg, rgba(88, 14, 31, .94), rgba(121, 22, 43, .92));
+      box-shadow: 0 8px 22px rgba(58, 4, 19, .42), inset 0 1px rgba(255, 255, 255, .17);
+      font-size: .82rem;
+      white-space: nowrap;
+    }
+    .capybara-cta .open-button:active {
+      transform: translate(-50%, -50%) scale(.96);
+    }
+    @media (max-height: 720px) {
+      .opening__mark { width: 64px; height: 64px; margin-bottom: 16px; font-size: 1.7rem; }
+      .opening p:not(.opening__eyebrow) { margin: 12px auto 8px; }
+      .capybara-cta { width: min(56vw, 205px); margin-top: 0; }
+    }
     .open-button, .letter-button {
       border: 1px solid rgba(230, 201, 153, .46);
       border-radius: 999px;
@@ -474,7 +511,10 @@
       <h1>365 TÄG</h1>
       <h1>DU & ICH</h1>
       <p>Min Goldschatz, du weisch mittlerwiile wie das funktioniert… Druck uf de Chnopf</p>
-      <button class="open-button" id="openButton" type="button">Zum Brief</button>
+      <div class="capybara-cta">
+        <img class="capybara-cta__image" src="assets/capybara-heart.png" alt="Ein herziges Capybara hält ein rotes Herz">
+        <button class="open-button" id="openButton" type="button">Zum Brief</button>
+      </div>
     </div>
   </div>
 
