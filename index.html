@@ -512,7 +512,7 @@
       <h1>DU & ICH</h1>
       <p>Min Goldschatz, du weisch mittlerwiile wie das funktioniert… Druck uf de Chnopf</p>
       <div class="capybara-cta">
-        <img class="capybara-cta__image" src="assets/capybara-heart.png?v=cartoon-2" alt="Ein herziges Capybara hält ein rotes Herz">
+        <img class="capybara-cta__image" src="assets/capybara-heart-animated.webp?v=1" alt="Ein herziges Capybara hält ein rotes Herz">
         <button class="open-button" id="openButton" type="button">Zum Brief</button>
       </div>
     </div>
@@ -751,6 +751,25 @@
     const letterButton = document.getElementById('letterButton');
     const finaleHeart = document.querySelector('.finale__heart');
     const lockScene = document.getElementById('lockScene');
+    const heroDayCount = document.querySelector('.hero h2');
+
+    const animateDayCount = () => {
+      if (!heroDayCount || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      const duration = 3000;
+      const startedAt = performance.now();
+      heroDayCount.firstChild.nodeValue = '1';
+
+      const updateCount = (now) => {
+        const progress = Math.min((now - startedAt) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 4);
+        heroDayCount.firstChild.nodeValue = String(Math.round(1 + eased * 364));
+
+        if (progress < 1) requestAnimationFrame(updateCount);
+      };
+
+      requestAnimationFrame(updateCount);
+    };
 
     openButton.addEventListener('click', (event) => {
       openButton.textContent = 'Für dich ♥';
@@ -770,6 +789,7 @@
       window.setTimeout(() => {
         opening.classList.add('is-open');
         document.body.classList.add('started');
+        animateDayCount();
       }, 720);
       window.setTimeout(() => opening.setAttribute('aria-hidden', 'true'), 1650);
     });
